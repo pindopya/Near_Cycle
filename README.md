@@ -4,7 +4,7 @@ Project วิชา Server-Side สำหรับลงจุดบริจ�
 
 ## Source of truth
 
-Scope ระบบทั้งหมดต้องยึดตาม [`server-side-project-system.md`](./server-side-project-system.md) เท่านั้น ไม่เพิ่ม Claim, Reservation, Chat หรือขั้นตอนยืนยันการรับของนอกเหนือจาก spec
+Scope ระบบทั้งหมดต้องยึดตาม [`Near_cycleproject-system.md`](./Near_cycleproject-system.md) เท่านั้น ไม่เพิ่ม Claim, Reservation, Chat หรือขั้นตอนยืนยันการรับของนอกเหนือจาก spec
 
 ## Tech Stack
 
@@ -38,7 +38,7 @@ server-side/
 ├── docs/
 ├── docker-compose.yml
 ├── .env.example
-└── server-side-project-system.md
+└── Near_cycleproject-system.md
 ```
 
 Backend flow หลักคือ `Request → Route → Middleware → Validator → Controller → Service → Prisma → PostgreSQL`
@@ -158,4 +158,4 @@ Frontend unit tests ครอบคลุม create/edit Donation กรณี�
 
 Phase 13 — Documentation & Final Review ✅
 
-Implementation ครบตาม `server-side-project-system.md` และไม่มีระบบ Claim / Reservation / Chat เพิ่มเข้ามานอก spec
+Implementation ครบตาม `Near_cycleproject-system.md` และไม่มีระบบ Claim / Reservation / Chat เพิ่มเข้ามานอก spec

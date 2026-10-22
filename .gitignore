@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.env
+.env.local
+coverage/
+*.log
+.DS_Store
+backend/uploads/donations/*
+!backend/uploads/donations/.gitkeep
+frontend/playwright-report/
+frontend/test-results/

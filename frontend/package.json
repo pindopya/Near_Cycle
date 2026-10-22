@@ -1,0 +1,28 @@
+{
+  "name": "ogtb-donation-map-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "node --test tests/*.test.js",
+    "test:e2e": "playwright test",
+    "test:e2e:list": "playwright test --list",
+    "test:e2e:desktop": "playwright test --project=desktop-chromium",
+    "lint": "eslint . --max-warnings=0"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "next": "^16.3.8",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-leaflet": "^5.0.0"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.8"
+  }
+}

@@ -1,0 +1,273 @@
+/* dev-tools map UX structure port — OGTB palette only */
+.mapShell {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background: #dfe7e7;
+}
+
+.mapCanvas,
+.pawMapCanvas {
+  width: 100%;
+  height: 100%;
+  background: #dfe7e7;
+}
+
+.pawMapCanvas .leaflet-tile {
+  filter: saturate(.82) contrast(.97) brightness(1.03);
+}
+
+.mapSummary {
+  position: absolute;
+  z-index: 510;
+  top: max(92px, calc(env(safe-area-inset-top) + 78px));
+  left: max(20px, env(safe-area-inset-left));
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border: 1px solid rgba(15,23,42,.07);
+  border-radius: 999px;
+  background: rgba(255,255,255,.92);
+  color: var(--ui-muted);
+  box-shadow: var(--ui-shadow-sm);
+  backdrop-filter: blur(14px);
+  font-size: 11px;
+}
+.mapSummary strong { color: var(--ui-ink); font-size: 14px; font-weight: 760; }
+.mapSummaryDot { width: 7px; height: 7px; border-radius: 50%; background: var(--ui-primary); box-shadow: 0 0 0 4px rgba(37,99,235,.12); }
+
+.mapStatus {
+  position: absolute;
+  z-index: 520;
+  top: max(92px, calc(env(safe-area-inset-top) + 78px));
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: min(420px, calc(100% - 180px));
+  padding: 9px 13px;
+  border: 1px solid rgba(15,23,42,.07);
+  border-radius: 13px;
+  background: rgba(255,255,255,.95);
+  color: var(--ui-text);
+  box-shadow: var(--ui-shadow-sm);
+  backdrop-filter: blur(14px);
+  font-size: 11px;
+  font-weight: 620;
+  text-align: center;
+}
+.mapStatusError { background: rgba(254,242,242,.97); color: var(--ui-danger); border-color: #fecaca; }
+.mapAccuracyNotice {
+  position: absolute;
+  z-index: 519;
+  top: max(140px, calc(env(safe-area-inset-top) + 126px));
+  left: max(20px, env(safe-area-inset-left));
+  max-width: min(420px, calc(100% - 40px));
+  padding: 8px 11px;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  background: rgba(255,251,235,.96);
+  color: #92400e;
+  box-shadow: var(--ui-shadow-sm);
+  backdrop-filter: blur(12px);
+  font-size: 10px;
+  font-weight: 680;
+}
+
+.mapFloatButton {
+  position: absolute;
+  z-index: 515;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(15,23,42,.08);
+  border-radius: 15px;
+  background: rgba(255,255,255,.95);
+  color: var(--ui-primary);
+  box-shadow: 0 8px 22px rgba(15,23,42,.12);
+  backdrop-filter: blur(14px);
+  cursor: pointer;
+}
+.mapLocateButton { top: max(92px, calc(env(safe-area-inset-top) + 78px)); right: max(20px, env(safe-area-inset-right)); }
+.mapLocateButton:disabled { opacity: .6; cursor: wait; }
+.mapLocateGlyph {
+  position: relative;
+  width: 19px;
+  height: 19px;
+  display: block;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 5px rgba(255,255,255,.95);
+}
+.mapLocateGlyph::before,
+.mapLocateGlyph::after { content: ''; position: absolute; background: currentColor; }
+.mapLocateGlyph::before { width: 2px; height: 25px; left: 6.5px; top: -5px; }
+.mapLocateGlyph::after { width: 25px; height: 2px; left: -5px; top: 6.5px; }
+.mapLocateSpinner { width: 18px; height: 18px; border: 2px solid #bfdbfe; border-top-color: var(--ui-primary); border-radius: 50%; animation: mapLocateSpin .8s linear infinite; }
+@keyframes mapLocateSpin { to { transform: rotate(360deg); } }
+
+.radiusFilter {
+  position: absolute;
+  z-index: 620;
+  left: 50%;
+  bottom: max(22px, calc(12px + env(safe-area-inset-bottom)));
+  width: min(520px, calc(100% - 32px));
+  transform: translateX(-50%);
+  padding: 12px 14px 11px;
+  border: 1px solid rgba(148,163,184,.32);
+  border-radius: 18px;
+  background: rgba(255,255,255,.97);
+  box-shadow: 0 14px 36px rgba(15,23,42,.16);
+  backdrop-filter: blur(18px);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease, opacity .2s ease;
+}
+.radiusFilter.isDragging { transform: translateX(-50%) translateY(-2px); border-color: #93c5fd; box-shadow: 0 18px 42px rgba(15,23,42,.2), 0 0 0 1px rgba(37,99,235,.1); }
+.radiusFilter.isDisabled { opacity: .78; }
+.radiusFilterHeader { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 8px; }
+.radiusFilterHeader > div { min-width: 0; display: grid; gap: 1px; }
+.radiusFilterHeader strong { color: var(--ui-ink); font-size: 12px; font-weight: 800; }
+.radiusFilterHeader span { color: var(--ui-muted); font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.radiusFilterValue {
+  flex: 0 0 auto;
+  min-width: 66px;
+  padding: 6px 10px;
+  border: 1px solid #bfdbfe;
+  border-radius: 11px;
+  background: var(--ui-primary-soft);
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 850;
+  text-align: center;
+  transition: transform .16s ease, background .16s ease, border-color .16s ease;
+}
+.radiusFilter.isDragging .radiusFilterValue { transform: scale(1.05); background: #dbeafe; border-color: #93c5fd; }
+.radiusSliderWrap { position: relative; }
+.radiusSlider {
+  width: 100%;
+  height: 22px;
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+.radiusSlider:disabled { cursor: not-allowed; opacity: .45; }
+.radiusSlider::-webkit-slider-runnable-track { height: 5px; border-radius: 99px; background: linear-gradient(90deg, var(--ui-primary) 0 var(--radius-progress), #dbe3ed var(--radius-progress) 100%); }
+.radiusSlider::-moz-range-track { height: 5px; border-radius: 99px; background: #dbe3ed; }
+.radiusSlider::-moz-range-progress { height: 5px; border-radius: 99px; background: var(--ui-primary); }
+.radiusSlider::-webkit-slider-thumb {
+  width: 18px;
+  height: 18px;
+  margin-top: -6.5px;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: var(--ui-primary);
+  box-shadow: 0 2px 8px rgba(15,23,42,.2), 0 0 0 1px rgba(37,99,235,.16);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.radiusSlider::-moz-range-thumb { width: 14px; height: 14px; border: 3px solid #fff; border-radius: 50%; background: var(--ui-primary); box-shadow: 0 2px 8px rgba(15,23,42,.2); }
+.radiusFilter.isDragging .radiusSlider::-webkit-slider-thumb { transform: scale(1.15); box-shadow: 0 3px 12px rgba(15,23,42,.24), 0 0 0 4px rgba(37,99,235,.1); }
+.radiusSliderLabels { display: flex; justify-content: space-between; margin-top: -1px; color: #94a3b8; font-size: 8px; font-weight: 700; }
+.mapRadiusCircle { transition: fill-opacity .2s ease, stroke-opacity .2s ease; }
+
+/* Category is required by Donation spec; geometry reuses the same dev-tools floating-control language. */
+.mapCategoryFilter {
+  position: absolute;
+  z-index: 621;
+  left: 50%;
+  bottom: max(154px, calc(144px + env(safe-area-inset-bottom)));
+  width: min(300px, calc(100% - 32px));
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: auto minmax(0,1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 5px 7px 5px 11px;
+  border: 1px solid rgba(148,163,184,.3);
+  border-radius: 14px;
+  background: rgba(255,255,255,.96);
+  box-shadow: var(--ui-shadow-sm);
+  backdrop-filter: blur(14px);
+}
+.mapCategoryFilterLabel { color: var(--ui-muted); font-size: 10px; font-weight: 760; }
+.mapCategoryFilter input { min-width: 0; width: 100%; height: 30px; padding: 0; border: 0; outline: 0; background: transparent; color: var(--ui-ink); font: inherit; font-size: 12px; }
+.mapCategoryFilter input::placeholder { color: #94a3b8; }
+.mapCategoryClear { width: 30px; height: 30px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 9px; background: var(--ui-surface-soft); color: var(--ui-muted); font: inherit; cursor: pointer; }
+.mapCategoryFilter.isDisabled { opacity: .65; }
+
+.mapMarkerHost { background: transparent !important; border: 0 !important; }
+.mapAnimalMarker { position: relative; width: 50px; height: 58px; display: grid; justify-items: center; align-content: start; transition: transform .16s ease, filter .16s ease; transform-origin: 50% 88%; }
+.mapAnimalEmoji {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 3px solid #fff;
+  border-radius: 12px;
+  background: #f59e0b;
+  color: #fff;
+  box-shadow: 0 9px 24px rgba(15,23,42,.22);
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  font-size: 27px;
+  line-height: 1;
+}
+.mapAnimalMarker > b { width: 9px; height: 9px; margin-top: -5px; transform: rotate(45deg); background: #f59e0b; border-right: 3px solid #fff; border-bottom: 3px solid #fff; }
+.mapAnimalMarker.isSelected { transform: translateY(-3px) scale(1.12); filter: drop-shadow(0 8px 12px rgba(15,23,42,.16)); }
+.mapAnimalMarker.isSelected .mapAnimalEmoji { box-shadow: 0 0 0 4px rgba(255,255,255,.9), 0 0 0 7px rgba(37,99,235,.18), 0 10px 24px rgba(15,23,42,.2); }
+
+.mapUserMarker { position: relative; width: 36px; height: 36px; display: grid; place-items: center; }
+.mapUserMarkerPulse { position: absolute; width: 34px; height: 34px; border-radius: 50%; background: rgba(37,99,235,.18); animation: mapUserPulse 2s ease-out infinite; }
+.mapUserMarkerDot { position: relative; width: 16px; height: 16px; border: 4px solid #fff; border-radius: 50%; background: var(--ui-primary); box-shadow: 0 3px 12px rgba(15,23,42,.22); }
+@keyframes mapUserPulse { 0%,100% { transform: scale(.8); opacity: .9; } 70% { transform: scale(1.35); opacity: 0; } }
+
+.pawPopup .leaflet-popup-content-wrapper { border-radius: 20px; background: var(--ui-surface); color: var(--ui-ink); box-shadow: 0 18px 45px rgba(15,23,42,.16); border: 1px solid rgba(15,23,42,.07); }
+.pawPopup .leaflet-popup-content { margin: 16px; }
+.pawPopup .leaflet-popup-tip { background: var(--ui-surface); box-shadow: none; }
+.popupCard { min-width: 206px; }
+.popupTypeRow { display: flex; align-items: center; gap: 9px; color: var(--ui-muted); font-size: 11px; font-weight: 680; }
+.popupAnimalIcon { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 9px; background: #f59e0b; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; font-size: 18px; line-height: 1; }
+.popupHeadline { display: block; margin: 13px 0 12px; color: var(--ui-ink); font-size: 18px; letter-spacing: -.02em; }
+.popupData { padding: 10px 11px; border-radius: 12px; background: var(--ui-surface-soft); display: grid; gap: 2px; }
+.popupData span { color: var(--ui-muted); font-size: 10px; }
+.popupData strong { color: var(--ui-ink); font-size: 12px; font-weight: 700; }
+.popupAction { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--ui-line); color: var(--ui-primary); font-size: 12px; font-weight: 740; text-decoration: none; }
+.popupAction span { transition: transform .16s ease; }
+.popupAction:hover span { transform: translateX(2px); }
+
+.mapShell .leaflet-control-zoom { border: 0 !important; box-shadow: var(--ui-shadow-sm) !important; margin-right: 20px; margin-bottom: 106px; }
+.mapShell .leaflet-control-zoom a { width: 40px; height: 40px; line-height: 38px; border-color: rgba(15,23,42,.08) !important; background: rgba(255,255,255,.97); color: var(--ui-text); }
+.mapShell .leaflet-control-zoom a:first-child { border-radius: 12px 12px 0 0; }
+.mapShell .leaflet-control-zoom a:last-child { border-radius: 0 0 12px 12px; }
+.mapShell .leaflet-control-attribution { max-width: min(64vw,420px); padding: 1px 4px !important; border-radius: 6px 0 0 0; background: rgba(255,255,255,.78) !important; color: var(--ui-muted) !important; font-size: 8px !important; line-height: 1.2 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; backdrop-filter: blur(8px); }
+
+@media (max-width: 700px) {
+  .mapSummary, .mapStatus, .mapLocateButton { top: max(76px, calc(env(safe-area-inset-top) + 64px)); }
+  .mapSummary { left: max(12px, env(safe-area-inset-left)); min-height: 34px; padding: 7px 10px; }
+  .mapStatus { max-width: calc(100% - 128px); font-size: 10px; }
+  .mapLocateButton { right: max(12px, env(safe-area-inset-right)); width: 42px; min-width: 42px; height: 42px; padding: 0; border-radius: 14px; font-size: 0; }
+  .radiusFilter { bottom: max(16px, calc(8px + env(safe-area-inset-bottom))); width: calc(100% - 24px); padding: 10px 12px 9px; border-radius: 17px; }
+  .radiusFilterHeader { margin-bottom: 6px; }
+  .mapCategoryFilter { bottom: max(142px, calc(134px + env(safe-area-inset-bottom))); width: min(300px, calc(100% - 24px)); }
+  .mapShell .leaflet-control-zoom { margin-right: 12px; margin-bottom: max(196px, calc(188px + env(safe-area-inset-bottom))); }
+}
+
+@media (max-width: 430px) {
+  .radiusFilter { width: calc(100% - 20px); padding: 9px 11px 8px; border-radius: 16px; }
+  .radiusFilterHeader strong { font-size: 11px; }
+  .radiusFilterHeader span { font-size: 9px; }
+  .radiusFilterValue { min-width: 60px; padding: 5px 8px; font-size: 11px; }
+  .mapCategoryFilter { bottom: max(136px, calc(128px + env(safe-area-inset-bottom))); width: calc(100% - 20px); }
+  .mapStatus { top: max(128px, calc(env(safe-area-inset-top) + 116px)); bottom: auto; left: 12px; right: 12px; max-width: none; transform: none; }
+  .mapSummary span:last-child { display: none; }
+  .mapShell .leaflet-control-zoom { margin-bottom: max(190px, calc(182px + env(safe-area-inset-bottom))); }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .mapCategoryFilter input { font-size: 16px; }
+}

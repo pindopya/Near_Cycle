@@ -1,0 +1,556 @@
+/* Self-contained styles for /donations/[id]/navigate. */
+.navExperience,
+.navExperience *,
+.navStandaloneState,
+.navStandaloneState * {
+  box-sizing: border-box;
+}
+.navExperience {
+  --nav-surface: #ffffff;
+  --nav-surface-soft: #f8fafc;
+  --nav-ink: #0f172a;
+  --nav-text: #334155;
+  --nav-muted: #64748b;
+  --nav-line: #e2e8f0;
+  --nav-primary: #2563eb;
+  --nav-danger: #b91c1c;
+  --nav-danger-soft: #fef2f2;
+  --nav-shadow-sm: 0 4px 14px rgba(15, 23, 42, 0.06);
+  --nav-edge-x: max(14px, calc(env(safe-area-inset-left) + 10px));
+  --nav-edge-right: max(14px, calc(env(safe-area-inset-right) + 10px));
+  --nav-edge-top: max(14px, calc(env(safe-area-inset-top) + 10px));
+  --nav-edge-bottom: max(12px, calc(env(safe-area-inset-bottom) + 8px));
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  width: 100dvw;
+  height: 100dvh;
+  max-width: 100%;
+  overflow: hidden;
+  background: #dfe7e7;
+  color: var(--nav-ink);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.navStandaloneState {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 24px;
+  background: #eef2f3;
+  color: #0f172a;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.navStateCard {
+  width: min(420px, 100%);
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+  text-align: center;
+}
+
+.navStateError {
+  padding: 12px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  background: #fef2f2;
+  color: #b91c1c;
+  line-height: 1.5;
+}
+
+.navStateButton {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-radius: 12px;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.navExperience .navMapStage {
+  position: absolute;
+  inset: 0;
+}
+
+.navExperience .navigationMapCanvas {
+  width: 100%;
+  height: 100dvh;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.navExperience .navTopBar {
+  position: absolute;
+  z-index: 830;
+  top: var(--nav-edge-top);
+  left: var(--nav-edge-x);
+  right: var(--nav-edge-right);
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  pointer-events: none;
+}
+
+.navExperience .navTopBarSimple { align-items: center; }
+
+.navExperience .navRoundButton,
+.navExperience .navDestinationCompact,
+.navExperience .navMapButton,
+.navExperience .navBottomSheet {
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(255, 255, 255, 0.97);
+  color: var(--nav-ink);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+  backdrop-filter: blur(14px);
+}
+
+.navExperience .navRoundButton {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: 760;
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+.navExperience .navDestinationCompact {
+  pointer-events: auto;
+  width: min(420px, 100%);
+  min-width: 0;
+  max-width: 420px;
+  min-height: 44px;
+  flex: 1 1 320px;
+  display: grid;
+  align-content: center;
+  gap: 1px;
+  padding: 8px 13px;
+  border-radius: 15px;
+}
+
+.navExperience .navDestinationCompact span {
+  color: var(--nav-muted);
+  font-size: 9px;
+  font-weight: 720;
+}
+
+.navExperience .navDestinationCompact strong {
+  overflow: hidden;
+  color: var(--nav-ink);
+  font-size: 12px;
+  font-weight: 690;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navExperience .navMapControls {
+  position: absolute;
+  z-index: 840;
+  top: calc(var(--nav-edge-top) + 62px);
+  right: var(--nav-edge-right);
+  bottom: auto !important;
+  display: grid;
+  gap: 8px;
+}
+
+.navExperience .navMapButton {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.navExperience .navMapButton:disabled { opacity: 0.6; cursor: wait; }
+
+.navExperience .navRecenterIcon {
+  position: relative;
+  display: block;
+  width: 19px;
+  height: 19px;
+  margin: auto;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 5px rgba(255, 255, 255, 0.97);
+}
+
+.navExperience .navRecenterIcon::before,
+.navExperience .navRecenterIcon::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+
+.navExperience .navRecenterIcon::before { width: 2px; height: 25px; left: 6.5px; top: -5px; }
+.navExperience .navRecenterIcon::after { width: 25px; height: 2px; left: -5px; top: 6.5px; }
+
+.navExperience .navBottomSheet {
+  position: absolute;
+  z-index: 850;
+  left: 50%;
+  bottom: var(--nav-edge-bottom);
+  width: min(520px, calc(100% - var(--nav-edge-x) - var(--nav-edge-right)));
+  max-width: 520px;
+  max-height: min(48dvh, 460px, calc(100dvh - 132px - env(safe-area-inset-top) - env(safe-area-inset-bottom)));
+  transform: translateX(-50%);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding: 8px 16px 15px;
+  border-radius: 24px;
+}
+
+.navExperience .navBottomSheet::-webkit-scrollbar { width: 0; height: 0; }
+
+.navExperience .navSheetHandleButton {
+  width: 72px;
+  height: 18px;
+  display: block;
+  margin: -4px auto 4px;
+  padding: 6px 17px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.navExperience .navSheetHandle {
+  width: 38px;
+  height: 4px;
+  display: block;
+  margin: 0;
+  border-radius: 99px;
+  background: #cbd5e1;
+}
+
+.navExperience .navSheetHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.navExperience .navSheetHeader > div:first-child {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.navExperience .navSheetHeaderSimple { min-height: 62px; }
+
+.navExperience .navEyebrow {
+  display: block;
+  color: var(--nav-primary);
+  font-size: 10px;
+  font-weight: 780;
+  letter-spacing: 0.02em;
+}
+
+.navExperience .navSheetHeaderSimple h1 {
+  margin: 6px 0 2px;
+  color: var(--nav-ink);
+  font-size: 22px;
+  font-weight: 720;
+  letter-spacing: -0.035em;
+}
+
+.navExperience .navSheetHeaderSimple p {
+  margin: 2px 0 0;
+  color: var(--nav-muted);
+  font-size: 11px;
+}
+
+.navExperience .navDistanceSummary {
+  min-width: 98px;
+  flex: 0 0 auto;
+  padding: 10px 11px;
+  border-radius: 14px;
+  background: var(--nav-surface-soft);
+  text-align: right;
+}
+
+.navExperience .navDistanceSummary strong { display: block; color: var(--nav-ink); font-size: 21px; }
+.navExperience .navDistanceSummary span { display: block; margin-top: 1px; color: var(--nav-muted); font-size: 10px; }
+
+.navExperience .navGpsPill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 9px 0;
+  padding: 8px 11px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: var(--nav-surface-soft);
+  color: var(--nav-muted);
+  font-size: 10px;
+}
+
+.navExperience .navGpsPill strong { color: var(--nav-ink); font-size: 11px; }
+.navExperience .navGpsPill.gpsGood { border-color: #a7f3d0; }
+.navExperience .navGpsPill.gpsFair { border-color: #fed7aa; }
+.navExperience .navGpsPill.gpsPoor { border-color: #fecaca; }
+
+.navExperience .navInlineNotice {
+  margin: 9px 0;
+  padding: 9px 11px;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  font-size: 11px;
+  font-weight: 560;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.navExperience .routeErrorNotice { background: var(--nav-danger-soft); color: var(--nav-danger); border-color: #fecaca; }
+.navExperience .navOffRouteNotice { background: #fff7ed; color: #b45309; border-color: #fed7aa; }
+.navExperience .navRecoveryNotice { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+
+.navExperience .navInlineRetry {
+  margin-left: 8px;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 760;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.navExperience .navPrimaryActions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.navExperience .navPrimaryActions > * { min-width: 0; }
+
+.navExperience .navStartButton {
+  min-height: 46px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--nav-primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 720;
+  cursor: pointer;
+}
+
+.navExperience .navStartButton:disabled { opacity: 0.72; cursor: wait; }
+
+.navExperience .navBottomSheet.navSheetCollapsed {
+  width: 48px !important;
+  height: 48px;
+  min-height: 48px;
+  max-height: 48px;
+  padding: 0 !important;
+  bottom: max(12px, calc(8px + env(safe-area-inset-bottom))) !important;
+  border-radius: 50% !important;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.navExperience .navBottomSheet.navSheetCollapsed > :not(.navSheetHandleButton) { display: none !important; }
+.navExperience .navBottomSheet.navSheetCollapsed .navSheetHandleButton { width: 48px; height: 48px; margin: 0; padding: 0; display: grid; place-items: center; color: var(--nav-primary); }
+.navExperience .navBottomSheet.navSheetCollapsed .navSheetHandle { display: none; }
+.navExperience .navBottomSheet.navSheetCollapsed .navSheetHandleButton::after { content: "⌃"; display: block; font-size: 22px; line-height: 1; transform: translateY(3px); }
+
+.navExperience .leaflet-control-zoom { border: 0 !important; box-shadow: var(--nav-shadow-sm) !important; }
+.navExperience .leaflet-control-zoom a { width: 40px; height: 40px; line-height: 38px; border-color: #e2e8f0 !important; background: rgba(255, 255, 255, 0.97); color: var(--nav-text); }
+.navExperience .leaflet-control-attribution { max-width: 58vw; overflow: hidden; color: var(--nav-muted); font-size: 8px !important; text-overflow: ellipsis; white-space: nowrap; }
+
+.navExperience .navActiveTopBar {
+  position: absolute;
+  z-index: 860;
+  top: var(--nav-edge-top);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(540px, calc(100% - var(--nav-edge-x) - var(--nav-edge-right)));
+  max-width: 540px;
+  min-height: 74px;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 11px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.97);
+  color: var(--nav-ink);
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.16);
+  backdrop-filter: blur(14px);
+}
+
+.navExperience .navManeuverIcon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--nav-line);
+  border-radius: 14px;
+  background: var(--nav-surface-soft);
+  color: var(--nav-primary);
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.navExperience .navManeuverIcon.arrived { color: #047857; border-color: #a7f3d0; background: #ecfdf5; font-size: 13px; }
+.navExperience .navManeuverCopy { min-width: 0; display: grid; gap: 1px; }
+.navExperience .navManeuverCopy small { color: var(--nav-muted); font-size: 9px; font-weight: 720; }
+.navExperience .navManeuverCopy strong { overflow: hidden; color: var(--nav-ink); font-size: 15px; font-weight: 760; text-overflow: ellipsis; white-space: nowrap; }
+.navExperience.navActiveExperience .navMapControls { top: calc(var(--nav-edge-top) + 88px); }
+.navExperience .navRecenterNeeded { background: var(--nav-primary); color: #fff; }
+.navExperience .navStopButton { background: var(--nav-danger); color: #fff; }
+.navExperience .navStopButton:hover:not(:disabled) { background: #991b1b; }
+
+.navExperience .navSecondaryButton {
+  min-height: 46px;
+  border: 1px solid var(--nav-line);
+  border-radius: 14px;
+  background: var(--nav-surface-soft);
+  color: var(--nav-text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.navExperience .navSecondaryButton:hover { background: var(--nav-surface); }
+.navExperience .navPrimaryActionsSimple:has(.navSecondaryButton) { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); }
+.navExperience .navActiveSheet {
+  max-height: min(44dvh, 420px, calc(100dvh - 156px - env(safe-area-inset-top) - env(safe-area-inset-bottom)));
+}
+
+@media (max-width: 900px) {
+  .navExperience .navBottomSheet {
+    width: min(500px, calc(100% - var(--nav-edge-x) - var(--nav-edge-right)));
+  }
+}
+
+@media (max-width: 700px) {
+  .navExperience .leaflet-bottom.leaflet-right {
+    top: calc(var(--nav-edge-top) + 128px);
+    right: 4px;
+    bottom: auto !important;
+    z-index: 700;
+  }
+  .navExperience .leaflet-control-attribution {
+    max-width: 42vw;
+    margin: 0 !important;
+    padding: 2px 5px !important;
+    border-radius: 7px !important;
+    font-size: 7px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .navExperience {
+    --nav-edge-x: max(10px, calc(env(safe-area-inset-left) + 8px));
+    --nav-edge-right: max(10px, calc(env(safe-area-inset-right) + 8px));
+    --nav-edge-top: max(10px, calc(env(safe-area-inset-top) + 8px));
+  }
+  .navStandaloneState {
+    padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  }
+  .navExperience .navTopBar { gap: 8px; }
+  .navExperience .navRoundButton { width: 42px; height: 42px; }
+  .navExperience .navDestinationCompact { width: 100%; max-width: none; flex-basis: auto; }
+  .navExperience .navMapControls { top: calc(var(--nav-edge-top) + 58px); }
+  .navExperience .navBottomSheet {
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: min(50dvh, calc(100dvh - 112px - env(safe-area-inset-top)));
+    padding: 7px max(12px, calc(env(safe-area-inset-right) + 8px)) calc(12px + env(safe-area-inset-bottom)) max(12px, calc(env(safe-area-inset-left) + 8px));
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: 22px 22px 0 0;
+  }
+  .navExperience .navSheetHeader { gap: 8px; }
+  .navExperience .navSheetHeaderSimple { min-height: 56px; }
+  .navExperience .navSheetHeaderSimple h1 { font-size: 20px; }
+  .navExperience .navDistanceSummary { min-width: 88px; padding: 8px 9px; }
+  .navExperience .navDistanceSummary strong { font-size: 19px; }
+  .navExperience .navBottomSheet.navSheetCollapsed { width: 44px !important; height: 44px; min-height: 44px; max-height: 44px; }
+  .navExperience .navBottomSheet.navSheetCollapsed .navSheetHandleButton { width: 44px; height: 44px; }
+  .navExperience .navActiveTopBar {
+    width: calc(100% - var(--nav-edge-x) - var(--nav-edge-right));
+    min-height: 66px;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 9px;
+    padding: 9px 11px;
+    border-radius: 16px;
+  }
+  .navExperience .navManeuverIcon { width: 42px; height: 42px; border-radius: 12px; font-size: 21px; }
+  .navExperience .navManeuverCopy strong { font-size: 13px; }
+  .navExperience.navActiveExperience .navMapControls { top: calc(var(--nav-edge-top) + 76px); }
+}
+
+@media (max-width: 430px) {
+  .navExperience .navBottomSheet { max-height: min(52dvh, calc(100dvh - 104px - env(safe-area-inset-top))); }
+  .navExperience .navSheetHeaderSimple p { font-size: 10px; line-height: 1.4; }
+  .navExperience .leaflet-bottom.leaflet-right { top: calc(var(--nav-edge-top) + 120px); }
+}
+
+@media (max-width: 390px) {
+  .navExperience .navSheetHeaderSimple h1 { font-size: 18px; }
+  .navExperience .navDistanceSummary { min-width: 76px; padding: 7px 8px; }
+  .navExperience .navDistanceSummary strong { font-size: 17px; }
+  .navExperience .navStartButton,
+  .navExperience .navSecondaryButton { font-size: 11px; }
+}
+
+@media (max-height: 620px) {
+  .navExperience .navBottomSheet { max-height: min(42dvh, 320px); }
+  .navExperience .navActiveSheet { max-height: min(38dvh, 280px); }
+  .navExperience .navActiveTopBar { min-height: 62px; padding-top: 8px; padding-bottom: 8px; }
+  .navExperience.navActiveExperience .navMapControls { top: calc(var(--nav-edge-top) + 72px); }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .navExperience .navBottomSheet {
+    left: var(--nav-edge-x);
+    bottom: var(--nav-edge-bottom);
+    width: min(390px, 46vw);
+    max-width: 390px;
+    max-height: calc(100dvh - var(--nav-edge-top) - var(--nav-edge-bottom));
+    transform: none;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    border-radius: 20px;
+    padding: 7px 12px 12px;
+  }
+  .navExperience .navBottomSheet.navSheetCollapsed {
+    left: var(--nav-edge-x);
+    transform: none;
+  }
+  .navExperience .navActiveTopBar {
+    left: auto;
+    right: var(--nav-edge-right);
+    transform: none;
+    width: min(480px, 48vw);
+  }
+  .navExperience .navMapControls,
+  .navExperience.navActiveExperience .navMapControls {
+    top: calc(var(--nav-edge-top) + 66px);
+    right: var(--nav-edge-right);
+  }
+}

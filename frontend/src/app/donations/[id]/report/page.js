@@ -97,7 +97,7 @@ export default function ReportDonationPage() {
 
         <div className="reportPortActions">
           <Link href={`/donations/${id}`} className="button">ยกเลิก</Link>
-          <button className="button primary" type="submit" disabled={submitting}>{submitting ? 'กำลังส่ง...' : 'ส่งรายงาน'}</button>
+          <button className="button primary" type="submit" disabled={submitting} aria-busy={submitting}>{submitting ? 'กำลังส่ง...' : 'ส่งรายงาน'}</button>
         </div>
       </form>
     </main>

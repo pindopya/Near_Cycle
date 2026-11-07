@@ -65,7 +65,7 @@ export default function AdminUsersPage() {
                     </div>
                     <small className="muted">Donation {user._count?.donations ?? 0} · Report {user._count?.reports ?? 0}</small>
                   </div>
-                  <button type="button" className={`button ${user.isActive ? 'danger' : 'soft'}`} onClick={() => toggleUser(user)} disabled={busyId === user.id}>
+                  <button type="button" className={`button ${user.isActive ? 'danger' : 'soft'}`} onClick={() => toggleUser(user)} disabled={busyId === user.id} aria-busy={busyId === user.id}>
                     {busyId === user.id ? 'กำลังบันทึก...' : user.isActive ? 'ระงับบัญชี' : 'เปิดใช้งาน'}
                   </button>
                 </article>

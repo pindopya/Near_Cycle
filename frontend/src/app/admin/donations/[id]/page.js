@@ -127,10 +127,10 @@ export default function AdminDonationDetailPage() {
             <section className="card">
               <div className="pointSectionHeading"><div><span>การจัดการ</span><h3>จัดการ Donation</h3></div></div>
               <div className="sectionActions">
-                <button type="button" className="button" onClick={toggleVisibility} disabled={Boolean(busy)}>
+                <button type="button" className="button" onClick={toggleVisibility} disabled={Boolean(busy)} aria-busy={busy === 'visibility'}>
                   {busy === 'visibility' ? 'กำลังบันทึก...' : donation.isHidden ? 'แสดง Donation' : 'ซ่อน Donation'}
                 </button>
-                <button type="button" className="button danger" onClick={removeDonation} disabled={Boolean(busy)}>
+                <button type="button" className="button danger" onClick={removeDonation} disabled={Boolean(busy)} aria-busy={busy === 'delete'}>
                   {busy === 'delete' ? 'กำลังลบ...' : 'ลบ Donation'}
                 </button>
               </div>

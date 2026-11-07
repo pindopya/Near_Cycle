@@ -130,7 +130,7 @@ export default function DonationDetailPage() {
           {selectedImageUrl ? (
             <>
               <button type="button" className="pointPhotoButton" onClick={() => setPhotoOpen(true)} aria-label="เปิดรูปของบริจาคแบบเต็มจอ">
-                <img className="pointHeroImage" src={selectedImageUrl} alt={donation.title} />
+                <img key={selectedImageUrl} className="pointHeroImage" src={selectedImageUrl} alt={donation.title} />
                 <span className="pointPhotoHint">ดูรูปเต็ม</span>
               </button>
               {donation.images.length > 1 && (

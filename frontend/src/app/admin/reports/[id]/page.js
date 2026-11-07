@@ -147,14 +147,14 @@ export default function AdminReportDetailPage() {
             <section className="card adminPortActionCard">
               <div className="pointSectionHeading"><div><span>การจัดการ</span><h3>ดำเนินการกับ Report</h3></div></div>
               <div className="sectionActions">
-                <button type="button" className="button" onClick={hideDonation} disabled={Boolean(busy) || report.donation?.isHidden}>
+                <button type="button" className="button" aria-busy={busy === 'donation'} onClick={hideDonation} disabled={Boolean(busy) || report.donation?.isHidden}>
                   {busy === 'donation' ? 'กำลังซ่อน...' : report.donation?.isHidden ? 'ซ่อนอยู่แล้ว' : 'ซ่อน Donation'}
                 </button>
-                <button type="button" className="button danger" onClick={suspendOwner} disabled={Boolean(busy) || !report.donation?.owner?.isActive}>
+                <button type="button" className="button danger" aria-busy={busy === 'owner'} onClick={suspendOwner} disabled={Boolean(busy) || !report.donation?.owner?.isActive}>
                   {busy === 'owner' ? 'กำลังระงับ...' : report.donation?.owner?.isActive ? 'ระงับเจ้าของโพสต์' : 'เจ้าของถูกระงับแล้ว'}
                 </button>
-                <button type="button" className="button danger" onClick={deleteDonation} disabled={Boolean(busy)}>{busy === 'delete' ? 'กำลังลบ...' : 'ลบ Donation'}</button>
-                <button type="button" className="button primary" onClick={resolveReport} disabled={Boolean(busy) || report.status === 'RESOLVED'}>
+                <button type="button" className="button danger" onClick={deleteDonation} disabled={Boolean(busy)} aria-busy={busy === 'delete'}>{busy === 'delete' ? 'กำลังลบ...' : 'ลบ Donation'}</button>
+                <button type="button" className="button primary" aria-busy={busy === 'report'} onClick={resolveReport} disabled={Boolean(busy) || report.status === 'RESOLVED'}>
                   {busy === 'report' ? 'กำลังบันทึก...' : report.status === 'RESOLVED' ? 'ตรวจสอบแล้ว' : 'ปิด Report'}
                 </button>
               </div>

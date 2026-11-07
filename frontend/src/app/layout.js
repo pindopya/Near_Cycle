@@ -6,6 +6,8 @@ import './map-ux.css';
 import './auth-form-ux.css';
 import './detail-navigation-ux.css';
 import './admin-ux.css';
+import './motion.css';
+import RouteProgress from '../components/common/RouteProgress';
 import SiteHeader from '../components/common/SiteHeader';
 import { AuthProvider } from '../lib/useAuth';
 
@@ -25,6 +27,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="th">
       <body>
+        <RouteProgress />
         <AuthProvider>
           <SiteHeader />
           {children}

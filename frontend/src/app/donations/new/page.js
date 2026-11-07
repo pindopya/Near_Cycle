@@ -71,7 +71,7 @@ export default function NewDonationPage() {
           <div className="warningBox">รูปภาพ: {partialUpload.message}</div>
           {error && <div className="errorBox">{error}</div>}
           <div className="sectionActions partialSaveActions">
-            <button type="button" className="button primary" onClick={retryImages} disabled={submitting}>
+            <button type="button" className="button primary" onClick={retryImages} disabled={submitting} aria-busy={submitting}>
               {submitting ? 'กำลังอัปโหลด...' : 'ลองอัปโหลดรูปอีกครั้ง'}
             </button>
             <Link href={`/donations/${partialUpload.donation.id}/edit`} className="button soft">ไปหน้าแก้ไข</Link>

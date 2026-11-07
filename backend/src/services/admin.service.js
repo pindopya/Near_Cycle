@@ -1,8 +1,7 @@
 import { unlink } from 'node:fs/promises';
-import path from 'node:path';
-import { DonationStatus } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { AppError } from '../utils/response.js';
+import { expirePastDonations, imageDiskPath } from './donation.service.js';
 
 const userSelect = {
   id: true,
@@ -82,16 +81,17 @@ const adminReportInclude = {
   },
 };
 
-function donationImageDiskPath(imageUrl) {
-  return path.resolve('uploads', 'donations', path.basename(imageUrl));
+export async function getAdminSummary() {
+  // Dashboard only needs counts; COUNT(*) avoids shipping every row (with joins) to the browser.
+  const [users, donations, reports, pendingReports] = await prisma.$transaction([
+    prisma.user.count(),
+    prisma.donation.count(),
+    prisma.report.count(),
+    prisma.report.count({ where: { status: 'PENDING' } }),
+  ]);
+  return { users, donations, reports, pendingReports };
 }
 
-async function expirePastAdminDonations() {
-  await prisma.donation.updateMany({
-    where: { status: DonationStatus.AVAILABLE, endDate: { lt: new Date() } },
-    data: { status: DonationStatus.EXPIRED },
-  });
-}
 export function listAdminUsers() {
   return prisma.user.findMany({
     select: userSelect,
@@ -117,7 +117,7 @@ export async function setUserActive(userId, isActive, actingAdminId) {
 }
 
 export async function listAdminDonations() {
-  await expirePastAdminDonations();
+  await expirePastDonations();
   return prisma.donation.findMany({
     include: adminDonationInclude,
     orderBy: { createdAt: 'desc' },
@@ -125,7 +125,7 @@ export async function listAdminDonations() {
 }
 
 export async function getAdminDonation(donationId) {
-  await expirePastAdminDonations();
+  await expirePastDonations();
   const donation = await prisma.donation.findUnique({
     where: { id: donationId },
     include: adminDonationDetailInclude,
@@ -139,7 +139,7 @@ export async function getAdminDonation(donationId) {
 }
 
 export async function setDonationHidden(donationId, isHidden) {
-  await expirePastAdminDonations();
+  await expirePastDonations();
   const donation = await prisma.donation.findUnique({ where: { id: donationId } });
   if (!donation) {
     throw new AppError(404, 'DONATION_NOT_FOUND', 'ไม่พบโพสต์บริจาค');
@@ -164,12 +164,12 @@ export async function deleteDonationAsAdmin(donationId) {
 
   await prisma.donation.delete({ where: { id: donationId } });
   await Promise.all(
-    donation.images.map((image) => unlink(donationImageDiskPath(image.imageUrl)).catch(() => {})),
+    donation.images.map((image) => unlink(imageDiskPath(image.imageUrl)).catch(() => {})),
   );
 }
 
 export async function listAdminReports() {
-  await expirePastAdminDonations();
+  await expirePastDonations();
   return prisma.report.findMany({
     include: adminReportInclude,
     orderBy: { createdAt: 'desc' },
@@ -177,7 +177,7 @@ export async function listAdminReports() {
 }
 
 export async function getAdminReport(reportId) {
-  await expirePastAdminDonations();
+  await expirePastDonations();
   const report = await prisma.report.findUnique({
     where: { id: reportId },
     include: adminReportInclude,
@@ -191,7 +191,7 @@ export async function getAdminReport(reportId) {
 }
 
 export async function setReportStatus(reportId, status) {
-  await expirePastAdminDonations();
+  await expirePastDonations();
   const report = await prisma.report.findUnique({ where: { id: reportId } });
   if (!report) {
     throw new AppError(404, 'REPORT_NOT_FOUND', 'ไม่พบรายงาน');

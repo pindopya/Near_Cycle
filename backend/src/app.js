@@ -1,4 +1,3 @@
-import path from 'node:path';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
@@ -11,15 +10,20 @@ import { authRouter } from './routes/auth.routes.js';
 import { donationRouter } from './routes/donation.routes.js';
 import { reportRouter } from './routes/report.routes.js';
 import { routeRouter } from './routes/route.routes.js';
+import { UPLOAD_ROOT } from './services/donation.service.js';
 
 export const app = express();
 
 app.disable('x-powered-by');
+// Requests arrive through the Next.js proxy (loopback / Docker network); trust only those hops
+// so rate limits key on the real client IP instead of lumping every user into one bucket.
+app.set('trust proxy', 'loopback, uniquelocal');
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(cors({ origin: env.frontendUrl, credentials: true, methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'] }));
 app.use(express.json({ limit: '1mb', strict: true }));
 app.use(cookieParser());
-app.use('/uploads', express.static(path.resolve('uploads'), { dotfiles: 'deny', maxAge: '1h' }));
+// Upload filenames are random UUIDs that are never rewritten, so browsers can cache them for good.
+app.use('/uploads', express.static(UPLOAD_ROOT, { dotfiles: 'deny', maxAge: '30d', immutable: true }));
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', service: 'ogtb-donation-map-api' });

@@ -88,7 +88,7 @@ export default function EditDonationPage() {
   }
 
   if (authLoading || !donation) {
-    return <main className="page createPointPage"><div className="centerState">{error || 'กำลังโหลด...'}</div></main>;
+    return <main className="page createPointPage">{error ? <div className="errorBox" role="alert">{error}</div> : <div className="centerState">กำลังโหลด...</div>}</main>;
   }
   if (!user) return null;
   if (donation.ownerId !== user.id) {
@@ -116,7 +116,7 @@ export default function EditDonationPage() {
           <div className="warningBox">รูปภาพ: {partialUpload.message}</div>
           {error && <div className="errorBox">{error}</div>}
           <div className="sectionActions partialSaveActions">
-            <button type="button" className="button primary" onClick={retryImages} disabled={submitting}>
+            <button type="button" className="button primary" onClick={retryImages} disabled={submitting} aria-busy={submitting}>
               {submitting ? 'กำลังอัปโหลด...' : 'ลองอัปโหลดรูปอีกครั้ง'}
             </button>
             <Link href={`/donations/${id}`} className="button">ดูข้อมูลที่บันทึกแล้ว</Link>

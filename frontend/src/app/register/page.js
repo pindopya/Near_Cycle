@@ -57,12 +57,13 @@ export default function RegisterPage() {
         <form className="authCard" onSubmit={submit}>
           <span className="eyebrow">เข้าร่วม OGTB</span>
           <h1>สร้างบัญชี OGTB</h1>
-          <p>ใช้ชื่อ อีเมล และรหัสผ่านอย่างน้อย 8 ตัวที่มีตัวอักษรและตัวเลข</p>
-          {error && <div className="errorBox">{error}</div>}
+          <p>ใช้ชื่อ อีเมล และรหัสผ่านความยาว 8-72 ตัวอักษร</p>
+          {error && <div className="errorBox" role="alert">{error}</div>}
 
           <div className="field">
-            <label>ชื่อที่แสดง</label>
+            <label htmlFor="register-name">ชื่อที่แสดง</label>
             <input
+              id="register-name"
               required
               minLength={2}
               maxLength={80}
@@ -73,8 +74,9 @@ export default function RegisterPage() {
           </div>
 
           <div className="field authFieldGap">
-            <label>อีเมล</label>
+            <label htmlFor="register-email">อีเมล</label>
             <input
+              id="register-email"
               type="email"
               required
               autoComplete="email"
@@ -84,8 +86,9 @@ export default function RegisterPage() {
           </div>
 
           <div className="field authFieldGap">
-            <label>รหัสผ่าน</label>
+            <label htmlFor="register-password">รหัสผ่าน</label>
             <input
+              id="register-password"
               type="password"
               minLength={8}
               maxLength={72}
@@ -97,8 +100,9 @@ export default function RegisterPage() {
           </div>
 
           <div className="field authFieldGap">
-            <label>ยืนยันรหัสผ่าน</label>
+            <label htmlFor="register-confirm">ยืนยันรหัสผ่าน</label>
             <input
+              id="register-confirm"
               type="password"
               minLength={8}
               maxLength={72}
@@ -109,7 +113,7 @@ export default function RegisterPage() {
             />
           </div>
 
-          <button className="button primary block authSubmit" disabled={loading}>
+          <button className="button primary block authSubmit" disabled={loading} aria-busy={loading}>
             {loading ? 'กำลังสร้างบัญชี...' : 'สร้างบัญชี'}
           </button>
           <p className="authSwitch">มีบัญชีแล้ว? <Link href="/login" className="authSwitchLink">เข้าสู่ระบบ</Link></p>

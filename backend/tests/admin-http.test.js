@@ -64,6 +64,21 @@ test('admin APIs require admin role', async () => {
   assert.equal(normalUser.status, 403);
 });
 
+test('admin summary returns counts that include the fixtures', async () => {
+  const response = await fetch(`${baseUrl}/api/admin/summary`, {
+    headers: { authorization: `Bearer ${adminToken}` },
+  });
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.deepEqual(Object.keys(body).sort(), ['donations', 'pendingReports', 'reports', 'users']);
+  assert.ok(body.users >= 2 && body.donations >= 1 && body.reports >= 1 && body.pendingReports >= 1);
+
+  const normalUser = await fetch(`${baseUrl}/api/admin/summary`, {
+    headers: { authorization: `Bearer ${userToken}` },
+  });
+  assert.equal(normalUser.status, 403);
+});
+
 test('admin can list users, donations, and reports', async () => {
   const headers = { authorization: `Bearer ${adminToken}` };
   const [usersResponse, donationsResponse, reportsResponse] = await Promise.all([

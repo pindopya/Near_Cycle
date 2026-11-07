@@ -3,10 +3,22 @@ import { prisma } from '../config/database.js';
 import { env } from '../config/env.js';
 import { distanceKm, radiusBounds } from '../utils/distance.js';
 import { AppError } from '../utils/response.js';
+import { expirePastDonations } from './donation.service.js';
 
-const mapDonationInclude = {
-  owner: { select: { id: true, name: true } },
-  images: { orderBy: { createdAt: 'asc' }, take: 1 },
+// Only what the map marker/popup renders: radius search can return many rows, so skip
+// descriptions and the owner/image joins (the detail page loads those).
+const mapDonationSelect = {
+  id: true,
+  ownerId: true,
+  title: true,
+  category: true,
+  quantity: true,
+  latitude: true,
+  longitude: true,
+  address: true,
+  status: true,
+  startDate: true,
+  endDate: true,
 };
 
 const ROUTING_TIMEOUT_MS = 6000;
@@ -15,10 +27,7 @@ const ROUTING_MAX_ATTEMPTS = 2;
 export async function listNearbyDonations({ latitude, longitude, radiusKm: radius, category }) {
   const now = new Date();
 
-  await prisma.donation.updateMany({
-    where: { status: DonationStatus.AVAILABLE, endDate: { lt: now } },
-    data: { status: DonationStatus.EXPIRED },
-  });
+  await expirePastDonations();
 
   const bounds = radiusBounds(latitude, longitude, radius);
   const donations = await prisma.donation.findMany({
@@ -31,7 +40,7 @@ export async function listNearbyDonations({ latitude, longitude, radiusKm: radiu
       longitude: { gte: bounds.minLng, lte: bounds.maxLng },
       ...(category ? { category: { equals: category, mode: 'insensitive' } } : {}),
     },
-    include: mapDonationInclude,
+    select: mapDonationSelect,
   });
 
   return donations
@@ -42,6 +51,7 @@ export async function listNearbyDonations({ latitude, longitude, radiusKm: radiu
     .filter((donation) => donation.distanceKm <= radius)
     .sort((a, b) => a.distanceKm - b.distanceKm);
 }
+
 async function fetchRoutingResponse(url, fetchImpl) {
   let lastError = null;
 
@@ -97,6 +107,7 @@ export async function getDrivingRoute({ fromLat, fromLng, toLat, toLng }, fetchI
     })),
   };
 }
+
 export async function getDonationDrivingRoute({ donationId, fromLat, fromLng }, fetchImpl = fetch) {
   const now = new Date();
   const donation = await prisma.donation.findUnique({

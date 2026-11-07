@@ -1,0 +1,138 @@
+/*
+ * Motion layer: entrance transitions and press feedback, loaded last.
+ * Keyframes use `backwards` fill so the element's own transform (hover, selected
+ * marker, centered toasts) takes over again as soon as the animation ends.
+ * Only opacity/transform are animated to stay on the compositor (no layout jank).
+ */
+:root {
+  --motion-ease: cubic-bezier(.2, .8, .2, 1);
+  --motion-fast: .16s;
+  --motion-base: .28s;
+}
+
+@keyframes uiFadeIn { from { opacity: 0; } }
+@keyframes uiRise { from { opacity: 0; transform: translateY(10px); } }
+@keyframes uiDrop { from { opacity: 0; transform: translateY(-6px) scale(.98); } }
+@keyframes uiSlideUp { from { opacity: 0; transform: translateY(24px); } }
+@keyframes uiPop { 0% { opacity: 0; transform: translateY(-10px) scale(.6); } 70% { opacity: 1; transform: translateY(0) scale(1.06); } }
+@keyframes uiPulse { 50% { opacity: .55; } }
+
+/* Route change: every page mounts a new <main>, so this replays on navigation. */
+main.page,
+.authShell { animation: uiRise var(--motion-base) var(--motion-ease) backwards; }
+/* Leaflet measures its container on mount; keep the map shell transform-free. */
+.mapShell,
+.adminPortShell { animation: uiFadeIn var(--motion-base) ease backwards; }
+
+/* Cards cascade in slightly after the page. */
+.page .card { animation: uiRise var(--motion-base) var(--motion-ease) backwards; }
+.page .card:nth-of-type(2) { animation-delay: 40ms; }
+.page .card:nth-of-type(3) { animation-delay: 80ms; }
+.page .card:nth-of-type(n + 4) { animation-delay: 120ms; }
+
+
+/* Feedback boxes. */
+.errorBox,
+.warningBox,
+.successBox { animation: uiDrop var(--motion-fast) var(--motion-ease) backwards; }
+
+/* Menus & overlays. */
+.navMobileMenu { animation: uiDrop var(--motion-fast) var(--motion-ease) backwards; transform-origin: top right; }
+.locationPickerOverlay { animation: uiSlideUp var(--motion-base) var(--motion-ease) backwards; }
+
+/* Map chrome: the "updating" toast only shows for slow requests, so quick ones don't flash. */
+.mapStatus { animation: uiFadeIn .2s ease .25s backwards; }
+.mapStatusError { animation-delay: 0s; }
+.mapAccuracyNotice,
+.mapSummary { animation: uiFadeIn var(--motion-base) ease backwards; }
+.mapAnimalMarker { animation: uiPop .36s var(--motion-ease) backwards; }
+
+/* Press feedback for every button-like control. */
+.button:active:not(:disabled),
+.navMobileItem:active,
+.mapFloatButton:active:not(:disabled),
+.popupAction:active { transform: scale(.97); transition-duration: .06s; }
+
+/* Smooth image swaps in the detail gallery. */
+.pointHeroImage { animation: uiFadeIn .22s ease backwards; }
+
+/* ------------------------------------------------------------ loading feedback */
+@keyframes uiSpin { to { transform: rotate(360deg); } }
+@keyframes uiShimmer { from { background-position: 150% 0; } to { background-position: -50% 0; } }
+@keyframes routeProgressGrow { from { transform: scaleX(0); } to { transform: scaleX(.9); } }
+@keyframes routeProgressDone { from { opacity: 1; transform: scaleX(.9); } 60% { opacity: 1; transform: scaleX(1); } to { opacity: 0; transform: scaleX(1); } }
+
+/* Top bar while a link navigation is pending (RouteProgress.js). Slows toward 90% until the page arrives. */
+.routeProgress {
+  position: fixed; inset: 0 0 auto; z-index: 5000; height: 3px;
+  background: linear-gradient(90deg, #60a5fa, var(--ui-primary));
+  box-shadow: 0 0 10px rgba(37, 99, 235, .45);
+  transform-origin: left; transform: scaleX(0); opacity: 0; pointer-events: none;
+}
+.routeProgress.is-loading { opacity: 1; animation: routeProgressGrow 6s cubic-bezier(.1, .7, .2, 1) forwards; }
+.routeProgress.is-done { animation: routeProgressDone .45s ease forwards; }
+
+/* Page-level loading: spinner above the message, shown only if the wait is noticeable. */
+.centerState { align-content: center; gap: 14px; text-align: center; animation: uiFadeIn .2s ease .15s backwards; }
+.centerState::before {
+  content: ""; justify-self: center; width: 30px; height: 30px; border-radius: 50%;
+  border: 3px solid #dbeafe; border-top-color: var(--ui-primary);
+  animation: uiSpin .75s linear infinite;
+}
+
+/* In-button spinner for any control with aria-busy="true" (submit, save, delete...). */
+[aria-busy="true"] { cursor: progress; }
+.button[aria-busy="true"]::before,
+button[aria-busy="true"]::before {
+  content: ""; flex: none; display: inline-block; width: 14px; height: 14px; margin-right: 6px; vertical-align: -2px;
+  border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; opacity: .85;
+  animation: uiSpin .7s linear infinite;
+}
+.button[aria-busy="true"]::before { margin-right: 0; } /* .button is inline-flex with its own gap */
+
+/* Map "updating" pill gets a small spinner (error variant stays plain). */
+.mapStatus:not(.mapStatusError)::before {
+  content: ""; display: inline-block; width: 11px; height: 11px; margin-right: 7px; vertical-align: -1px;
+  border-radius: 50%; border: 2px solid #bfdbfe; border-top-color: var(--ui-primary);
+  animation: uiSpin .7s linear infinite;
+}
+
+/* Skeleton blocks shimmer while the dashboard loads (temporary, so a background animation is fine). */
+.isSkeleton > * {
+  background-color: #eef2f6;
+  background-image: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, .75) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: uiShimmer 1.3s linear infinite;
+}
+
+/* Image placeholders: a sweep behind the <img> until it paints over it. Transform-only so the
+   sweep that keeps running behind a loaded photo costs no repaints. */
+@keyframes uiSweep { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+.pointPhotoButton,
+.pointThumbButton,
+.donationImagePreview { position: relative; isolation: isolate; background-color: #eef2f6; }
+.pointPhotoButton::before,
+.pointThumbButton::before,
+.donationImagePreview::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(100deg, transparent 25%, rgba(255, 255, 255, .7) 50%, transparent 75%);
+  animation: uiSweep 1.3s linear infinite;
+}
+.adminPortGallery img { background-color: #eef2f6; }
+.isSkeleton { pointer-events: none; }
+.isSkeleton > * { display: block; border-radius: 8px; color: transparent; }
+.isSkeleton > span { width: 45%; height: 12px; }
+.isSkeleton > strong { width: 30%; height: 28px; margin-top: 10px; }
+.isSkeleton > small { width: 60%; height: 10px; margin-top: auto; padding: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

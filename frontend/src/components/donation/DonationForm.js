@@ -195,7 +195,7 @@ export default function DonationForm({
               <span aria-hidden="true">⌖</span>
               {hasLocation ? 'เปลี่ยนตำแหน่งบนแผนที่' : 'เลือกตำแหน่งบนแผนที่'}
             </button>
-            <button type="button" className="button soft" onClick={useCurrentLocation} disabled={locating}>
+            <button type="button" className="button soft" onClick={useCurrentLocation} disabled={locating} aria-busy={locating}>
               {locating ? 'กำลังหาตำแหน่ง...' : 'ใช้ตำแหน่งปัจจุบัน'}
             </button>
           </div>
@@ -296,7 +296,7 @@ export default function DonationForm({
 
         <div className="formActions createFormActions">
           <Link className="button" href={cancelHref}>ยกเลิก</Link>
-          <button className="button primary" disabled={submitting}>{submitting ? 'กำลังบันทึก...' : submitLabel}</button>
+          <button className="button primary" disabled={submitting} aria-busy={submitting}>{submitting ? 'กำลังบันทึก...' : submitLabel}</button>
         </div>
       </form>
 
@@ -307,7 +307,7 @@ export default function DonationForm({
               <span aria-hidden="true">←</span><span>กลับ</span>
             </button>
             <div><strong>เลือกตำแหน่งจุดรับของ</strong><span>แตะบนแผนที่เพื่อวางหมุด</span></div>
-            <button type="button" className="locationPickerGps" onClick={useCurrentLocation} disabled={locating}>{locating ? 'กำลังหา...' : 'ตำแหน่งฉัน'}</button>
+            <button type="button" className="locationPickerGps" onClick={useCurrentLocation} disabled={locating} aria-busy={locating}>{locating ? 'กำลังหา...' : 'ตำแหน่งฉัน'}</button>
           </div>
           <div className="locationPickerMap">
             {draftAccuracy != null && draftAccuracy > 60 && (

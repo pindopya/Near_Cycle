@@ -5,6 +5,7 @@ import {
   removeDonation,
   reportDetail,
   reports,
+  summary,
   updateDonationVisibility,
   updateReport,
   updateUserStatus,
@@ -17,6 +18,7 @@ export const adminRouter = Router();
 
 adminRouter.use(requireAuth, requireAdmin);
 
+adminRouter.get('/summary', summary);
 adminRouter.get('/users', users);
 adminRouter.patch('/users/:id/status', updateUserStatus);
 

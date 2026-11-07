@@ -66,6 +66,8 @@ export default function HomeMapClient({
   useEffect(() => {
     if (!userPosition) return undefined;
 
+    // Ignore responses from searches that were superseded while in flight.
+    let stale = false;
     const timer = setTimeout(async () => {
       const query = new URLSearchParams({
         lat: String(userPosition[0]),
@@ -77,16 +79,21 @@ export default function HomeMapClient({
       setLoading(true);
       setError('');
       try {
-        setDonations(await api(`/api/donations/nearby?${query}`));
+        const result = await api(`/api/donations/nearby?${query}`);
+        if (!stale) setDonations(result);
       } catch (requestError) {
+        if (stale) return;
         setDonations([]);
         setError(requestError.message || 'โหลดจุดบริจาคไม่สำเร็จ');
       } finally {
-        setLoading(false);
+        if (!stale) setLoading(false);
       }
     }, SEARCH_DEBOUNCE_MS);
 
-    return () => clearTimeout(timer);
+    return () => {
+      stale = true;
+      clearTimeout(timer);
+    };
   }, [userPosition, radiusKm, category]);
 
   const returnParams = new URLSearchParams();

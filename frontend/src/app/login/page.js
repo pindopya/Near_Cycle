@@ -60,11 +60,12 @@ export default function LoginPage() {
           <span className="eyebrow">ยินดีต้อนรับกลับ</span>
           <h1>เข้าสู่ระบบ OGTB</h1>
           <p>เข้าสู่ระบบเพื่อเพิ่มของบริจาค รายงานโพสต์ และจัดการโพสต์ของตัวเอง</p>
-          {error && <div className="errorBox">{error}</div>}
+          {error && <div className="errorBox" role="alert">{error}</div>}
 
           <div className="field">
-            <label>อีเมล</label>
+            <label htmlFor="login-email">อีเมล</label>
             <input
+              id="login-email"
               type="email"
               required
               autoComplete="email"
@@ -74,8 +75,9 @@ export default function LoginPage() {
           </div>
 
           <div className="field authFieldGap">
-            <label>รหัสผ่าน</label>
+            <label htmlFor="login-password">รหัสผ่าน</label>
             <input
+              id="login-password"
               type="password"
               required
               autoComplete="current-password"
@@ -84,7 +86,7 @@ export default function LoginPage() {
             />
           </div>
 
-          <button className="button primary block authSubmit" disabled={loading}>
+          <button className="button primary block authSubmit" disabled={loading} aria-busy={loading}>
             {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
           </button>
           <p className="authSwitch">ยังไม่มีบัญชี? <Link href="/register" className="authSwitchLink">สมัครสมาชิก</Link></p>

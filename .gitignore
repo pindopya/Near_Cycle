@@ -9,3 +9,4 @@ backend/uploads/donations/*
 !backend/uploads/donations/.gitkeep
 frontend/playwright-report/
 frontend/test-results/
+logs/

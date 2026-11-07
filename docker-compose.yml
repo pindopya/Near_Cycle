@@ -17,8 +17,9 @@ services:
 
   backend:
     image: node:24-alpine
+    restart: unless-stopped
     working_dir: /app
-    command: sh -c "npm install && npm run prisma:generate && npm run db:deploy && npm run dev"
+    command: sh -c "npm install && npm run db:deploy && npm run dev"
     volumes:
       - ./backend:/app
       - backend_node_modules:/app/node_modules
@@ -35,14 +36,23 @@ services:
       SEED_USER_PASSWORD: ${SEED_USER_PASSWORD:-}
       E2E_DISABLE_RATE_LIMIT: ${E2E_DISABLE_RATE_LIMIT:-false}
       NODE_ENV: ${NODE_ENV:-development}
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:$${BACKEND_PORT}/health >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 300s
     depends_on:
       db:
         condition: service_healthy
 
   frontend:
     image: node:24-alpine
+    # `next dev` exits cleanly (code 0) when stdin is closed, as it is in a detached container,
+    # so feed it a never-ending pipe. restart brings it back if it still stops for another reason.
+    restart: unless-stopped
     working_dir: /app
-    command: sh -c "npm install && npm run dev -- --hostname 0.0.0.0"
+    command: sh -c "npm install && tail -f /dev/null | node node_modules/next/dist/bin/next dev --hostname 0.0.0.0"
     volumes:
       - ./frontend:/app
       - frontend_node_modules:/app/node_modules

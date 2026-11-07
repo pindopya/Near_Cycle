@@ -10,19 +10,8 @@ export default function AdminDashboardPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    Promise.all([
-      api('/api/admin/users'),
-      api('/api/admin/donations'),
-      api('/api/admin/reports'),
-    ])
-      .then(([users, donations, reports]) => {
-        setSummary({
-          users: users.length,
-          donations: donations.length,
-          reports: reports.length,
-          pendingReports: reports.filter((report) => report.status === 'PENDING').length,
-        });
-      })
+    api('/api/admin/summary')
+      .then(setSummary)
       .catch((requestError) => setError(requestError.message || 'โหลด Dashboard ไม่สำเร็จ'));
   }, []);
 
@@ -39,7 +28,15 @@ export default function AdminDashboardPage() {
         </header>
 
         {error && <div className="errorBox">{error}</div>}
-        {!error && !summary && <div className="centerState adminPortLoading">กำลังโหลดข้อมูล Dashboard...</div>}
+        {!error && !summary && (
+          <section className="card" role="status" aria-label="กำลังโหลดข้อมูล Dashboard">
+            <div className="stats adminPortStats">
+              {[0, 1, 2].map((key) => (
+                <div key={key} className="stat adminPortStat isSkeleton" aria-hidden="true"><span /><strong /><small /></div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {summary && (
           <section className="card">

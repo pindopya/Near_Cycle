@@ -8,7 +8,7 @@ import { Circle, MapContainer, Marker, Popup, TileLayer, ZoomControl, useMap } f
 const DEFAULT_CENTER = [13.7291, 100.7789];
 const WORLD_BOUNDS = [[-85, -180], [85, 180]];
 
-function donationIcon(selected = false) {
+function donationIcon(selected) {
   return L.divIcon({
     className: 'mapMarkerHost',
     html: `<div class="mapAnimalMarker mapAnimalMarker--donation${selected ? ' isSelected' : ''}"><span class="mapAnimalEmoji" aria-hidden="true">🎁</span><b></b></div>`,
@@ -18,6 +18,10 @@ function donationIcon(selected = false) {
   });
 }
 
+// Shared instances: a new icon object per render makes Leaflet rebuild every marker (visible flicker).
+const donationIcons = { idle: donationIcon(false), selected: donationIcon(true) };
+const RADIUS_FIT_DELAY_MS = 180;
+
 const userIcon = L.divIcon({
   className: 'mapMarkerHost',
   html: '<div class="mapUserMarker"><span class="mapUserMarkerPulse"></span><span class="mapUserMarkerDot"></span></div>',
@@ -26,12 +30,7 @@ const userIcon = L.divIcon({
 });
 
 function LocateUser({ position }) {
-  const map = useMap();
-
-  useEffect(() => {
-    if (position) map.setView(position, Math.max(map.getZoom(), 15), { animate: true });
-  }, [position, map]);
-
+  // Viewport is handled by RadiusViewport; a second setView here fought its fly animation.
   if (!position) return null;
   return <Marker position={position} icon={userIcon} zIndexOffset={900} interactive={false} />;
 }
@@ -40,21 +39,26 @@ function RadiusViewport({ center, radiusKm }) {
   const map = useMap();
 
   useEffect(() => {
-    if (!center || !radiusKm) return;
+    if (!center || !radiusKm) return undefined;
     const [latitude, longitude] = center;
     const latDelta = radiusKm / 111.32;
     const lngScale = Math.max(0.2, Math.cos((latitude * Math.PI) / 180));
     const lngDelta = radiusKm / (111.32 * lngScale);
-    map.flyToBounds([
-      [latitude - latDelta, longitude - lngDelta],
-      [latitude + latDelta, longitude + lngDelta],
-    ], {
-      animate: true,
-      duration: 0.42,
-      maxZoom: 16,
-      paddingTopLeft: [44, 110],
-      paddingBottomRight: [44, 110],
-    });
+    // Wait for the slider to settle instead of starting a new fly animation on every tick.
+    const timer = setTimeout(() => {
+      map.flyToBounds([
+        [latitude - latDelta, longitude - lngDelta],
+        [latitude + latDelta, longitude + lngDelta],
+      ], {
+        animate: true,
+        duration: 0.6,
+        easeLinearity: 0.2,
+        maxZoom: 16,
+        paddingTopLeft: [44, 110],
+        paddingBottomRight: [44, 110],
+      });
+    }, RADIUS_FIT_DELAY_MS);
+    return () => clearTimeout(timer);
   }, [center, radiusKm, map]);
 
   return null;
@@ -115,7 +119,7 @@ export default function DonationMap({
           <Marker
             key={donation.id}
             position={[donation.latitude, donation.longitude]}
-            icon={donationIcon(selected)}
+            icon={selected ? donationIcons.selected : donationIcons.idle}
             zIndexOffset={selected ? 500 : 0}
             eventHandlers={{ click: () => setSelectedId(donation.id), popupclose: () => setSelectedId(null) }}
           >

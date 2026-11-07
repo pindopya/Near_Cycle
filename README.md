@@ -67,6 +67,22 @@ Docker Compose จะให้ Next.js proxy `/api/*` และ `/uploads/*` ไ
 
 ควรเปลี่ยน `JWT_SECRET`, `SEED_ADMIN_PASSWORD` และ `SEED_USER_PASSWORD` ก่อนใช้งานจริง โดย production จะบังคับให้ `JWT_SECRET` มีความยาวอย่างน้อย 32 ตัวอักษร
 
+## One-click setup (แนะนำ)
+
+- **Windows:** ดับเบิลคลิก `setup.cmd` (ถ้ายังไม่มี Git Bash จะติดตั้งให้)
+- **macOS / Linux / Git Bash:** `./setup.sh`
+
+สคริปต์จะทำให้ครบในครั้งเดียว และข้ามสิ่งที่มีอยู่แล้ว:
+
+1. ตรวจ/ติดตั้ง curl, Node.js (20.19+/22.12+/24+), Docker + Compose (Windows: winget, macOS: Homebrew, Linux: apt/dnf + get.docker.com)
+2. เปิด Docker engine แล้วรอจนพร้อม
+3. สร้าง `.env` / `backend/.env` ถ้ายังไม่มี และสุ่ม `JWT_SECRET` กับรหัส seed ให้แทนค่า `replace-*` (ค่าที่ตั้งเองจะไม่ถูกแก้)
+4. `npm ci` ทุกโฟลเดอร์ที่มี `package.json` (ข้ามถ้า `node_modules` ตรงกับ lockfile แล้ว)
+5. `docker compose up -d` → รอ DB → API → Web แล้ว seed บัญชี `admin@ogtb.local` / `user@ogtb.local` (รหัสผ่านอยู่ใน `.env`)
+6. ทดสอบ DB (เชื่อมต่อ, schema, migration, เขียน/อ่าน), API ผ่าน web proxy (login admin แล้วอ่านข้อมูลจาก DB) และรัน test suite ของ backend/frontend ใน container — ข้ามได้ด้วย `--skip-tests`
+
+ทุกครั้งที่รันจะเก็บ log ไว้ที่ `logs/setup-<เวลา>.log` และ log ของ container ที่ `logs/compose-<เวลา>.log`
+
 ## Run with Docker Compose
 
 รันระบบทั้งหมดได้ทันที:
@@ -134,7 +150,6 @@ Coverage gate:
 - Functions ≥ 80%
 - Branches ≥ 60%
 
-Frontend:
 Frontend:
 
 ```bash

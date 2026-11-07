@@ -71,7 +71,7 @@ startDate <= now <= endDate
 อยู่ภายใน radius
 ```
 
-Response มี `distanceKm` เพิ่มสำหรับหน้า Map
+Response เป็นข้อมูลย่อสำหรับ Map (`id`, `ownerId`, `title`, `category`, `quantity`, `latitude`, `longitude`, `address`, `status`, `startDate`, `endDate`) พร้อม `distanceKm` — รายละเอียดเต็มและรูปใช้ `GET /api/donations/:id`
 
 ## Navigation
 
@@ -118,6 +118,7 @@ Reason:
 
 | Method | Endpoint | Description | Access | Success |
 | --- | --- | --- | --- | ---: |
+| GET | `/api/admin/summary` | จำนวน users / donations / reports / pendingReports สำหรับ Dashboard | ADMIN | 200 |
 | GET | `/api/admin/users` | ดู Users ทั้งหมด | ADMIN | 200 |
 | PATCH | `/api/admin/users/:id/status` | ระงับ/เปิดบัญชีด้วย `isActive` | ADMIN | 200 |
 | GET | `/api/admin/donations` | ดู Donations ทั้งหมดรวมโพสต์ซ่อน | ADMIN | 200 |

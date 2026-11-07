@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { DonationStatus } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { AppError } from '../utils/response.js';
@@ -16,7 +17,8 @@ const donationInclude = {
     orderBy: { createdAt: 'asc' },
   },
 };
-const UPLOAD_ROOT = path.resolve('uploads');
+// Resolve from this file so uploads work no matter which directory the server is started from.
+export const UPLOAD_ROOT = fileURLToPath(new URL('../../uploads', import.meta.url));
 const DONATION_UPLOAD_DIR = path.join(UPLOAD_ROOT, 'donations');
 const MAX_DONATION_IMAGES = 5;
 const IMAGE_EXTENSION_BY_MIME = {
@@ -25,7 +27,7 @@ const IMAGE_EXTENSION_BY_MIME = {
   'image/webp': '.webp',
 };
 
-async function expirePastDonations() {
+export async function expirePastDonations() {
   await prisma.donation.updateMany({
     where: {
       status: DonationStatus.AVAILABLE,
@@ -46,7 +48,7 @@ async function getOwnedDonation(id, ownerId) {
   return donation;
 }
 
-function imageDiskPath(imageUrl) {
+export function imageDiskPath(imageUrl) {
   const filename = path.basename(imageUrl);
   return path.join(DONATION_UPLOAD_DIR, filename);
 }
@@ -179,4 +181,3 @@ export async function deleteDonationImage(donationId, imageId, ownerId) {
   await unlink(imageDiskPath(image.imageUrl)).catch(() => {});
 }
 
-export { UPLOAD_ROOT };

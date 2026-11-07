@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --watch src/server.js",
+    "dev": "prisma generate && node --watch src/server.js",
+    "postinstall": "prisma generate",
     "start": "node src/server.js",
     "test": "node --test --test-concurrency=1",
     "test:coverage": "node --test --test-concurrency=1 --experimental-test-coverage --test-coverage-lines=80 --test-coverage-functions=80 --test-coverage-branches=60",
@@ -31,6 +32,6 @@
     "pg": "^8.23.0"
   },
   "devDependencies": {
-    "prisma": "^7.10.0"
+    "prisma": "^7.10.1"
   }
 }

@@ -46,6 +46,18 @@ test('CORS does not grant a foreign origin', async () => {
   assert.notEqual(response.headers.get('access-control-allow-origin'), 'https://evil.example');
 });
 
+test('rate limit is tracked per forwarded client behind the local proxy', async () => {
+  const remaining = async (ip) => {
+    const response = await fetch(`${baseUrl}/api/donations/nearby?lat=x`, { headers: { 'x-forwarded-for': ip } });
+    return Number(/\br=(\d+)/.exec(response.headers.get('ratelimit') || '')?.[1]);
+  };
+  await remaining('203.0.113.10');
+  const first = await remaining('203.0.113.10');
+  const other = await remaining('203.0.113.11');
+  // A fresh client gets one more remaining request than a client that already made two.
+  assert.equal(other, first + 1, 'different clients behind the proxy must not share one bucket');
+});
+
 test('cleanup security HTTP test', async () => {
   await new Promise((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())));
 });

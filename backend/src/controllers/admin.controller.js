@@ -2,6 +2,7 @@ import {
   deleteDonationAsAdmin,
   getAdminDonation,
   getAdminReport,
+  getAdminSummary,
   listAdminDonations,
   listAdminReports,
   listAdminUsers,
@@ -23,6 +24,14 @@ function reportStatus(value) {
     throw new AppError(400, 'VALIDATION_ERROR', 'status ต้องเป็น PENDING หรือ RESOLVED');
   }
   return value;
+}
+
+export async function summary(_req, res, next) {
+  try {
+    res.json(await getAdminSummary());
+  } catch (error) {
+    next(error);
+  }
 }
 
 export async function users(_req, res, next) {

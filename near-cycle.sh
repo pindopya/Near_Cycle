@@ -185,11 +185,11 @@ start(){
   apiport="$(port_value BACKEND_PORT 4000)"
   await_http "Backend API" "http://127.0.0.1:$apiport/health" 360
   await_http "Frontend" "http://127.0.0.1:$webport/" 360
-  say "Checking WON Drop Point data..."
+  say "Checking recycling drop point data..."
   compose exec -T backend node scripts/won-import/import.mjs --validate
   compose exec -T backend node scripts/won-import/import.mjs --dry-run
   compose exec -T backend node scripts/won-import/import.mjs --apply --confirm
-  say "WON Import up to date"
+  say "Recycling drop point import up to date"
   start_tunnel
 }
 stop(){

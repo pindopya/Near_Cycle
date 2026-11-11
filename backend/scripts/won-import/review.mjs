@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('.',import.meta.url));
 const points=JSON.parse(await readFile(root+'points.json','utf8'));
 const lines=[
- '# WON Drop Points: coordinate review',
+ '# Recycling Drop Points: coordinate review',
  '',
  'Geocoding results are *candidates*, not the exact physical drop box.',
  'Verify the building/address and specific bin placement before setting geoStatus to approved.',
@@ -21,6 +21,6 @@ for(const p of points){
   const flags=[p.geoStatus,p.requiresManualReview?'requires point validation':null,p.publicAccess===false?'not public':null].filter(Boolean).join('; ');
   lines.push(`| ${p.sourceId} | ${p.name.replaceAll('|','/')} | ${coords} | ${display} | ${flags} |`);
 }
-lines.push('','Source: WON Drop Points.pdf, 31 locations. Coordinates: OpenStreetMap Nominatim candidate results.','');
+lines.push('','Sources: WON Drop Points.pdf (31) and Trash Lucky dropoffs (20). Coordinates: OpenStreetMap Nominatim candidate/approximate results.','');
 await writeFile(root+'geocode-review.md',lines.join('\n'));
 console.log('Review report written: scripts/won-import/geocode-review.md');

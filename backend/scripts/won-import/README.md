@@ -1,5 +1,5 @@
-# WON Drop Points importer (isolated)
-ข้อมูลจาก `WON Drop Points.pdf` 3 หน้า รวม 31 จุด (ชื่อ ที่อยู่ คำอธิบาย ประเภทขยะ) ถูกคัดลง `points.json`.
+# Recycling Drop Points importer (isolated)
+ข้อมูลจาก `WON Drop Points.pdf` 31 จุด และข้อมูลจุดรับ Trash Lucky อีก 20 จุดจาก https://trashlucky.com/dropoffs/ รวม 51 จุดใน `points.json`. ข้อมูลเก่าเก็บครบทุก field
 ไม่แก้ Prisma schema, API, UI, routes, migration หรือข้อมูลเดิม
 
 ## Commands (ที่ root ของ repository)
@@ -7,7 +7,10 @@
 # หา candidate coordinates จาก OpenStreetMap Nominatim (ต้องต่ออินเทอร์เน็ต)
 node backend/scripts/won-import/geocode.mjs
 
-# Validation/Dry-run ใช้ dependencies กับ DATABASE_URL ใน backend container
+# Validation สามารถรันผ่าน Node บนเครื่องได้โดยไม่ต้องเปิด Docker
+node backend/scripts/won-import/import.mjs --validate
+
+# Dry-run ใช้ dependencies กับ DATABASE_URL ใน backend container
 docker-compose exec -T backend node scripts/won-import/import.mjs --validate
 docker-compose exec -T backend node scripts/won-import/import.mjs --dry-run
 
@@ -28,9 +31,9 @@ docker-compose exec -T backend node scripts/won-import/import.mjs --apply --conf
 
 ## Mapping ชั่วคราว (ไม่แก้ระบบ)
 - Donation.title = ชื่อจุด
-- Donation.category = `WON Drop Point`
-- Donation.description = โครงการ, เงื่อนไขวัสดุ, รายละเอียด และ key `[WON-DROP-POINT:NN]` สำหรับกันซ้ำ
-- Donation.address/latitude/longitude = ที่อยู่ตาม PDF และพิกัดอ้างอิง (มีทั้ง candidate และ approximate)
+- Donation.category = `WON Drop Point` (ID 1–31) หรือ `Trash Lucky Drop Point` (ID 32–51)
+- Donation.description = โครงการ, เงื่อนไขวัสดุ, รายละเอียด และ key `[WON-DROP-POINT:NN]` หรือ `[TRASH-LUCKY-DROP-POINT:NN]` สำหรับกันซ้ำ
+- Donation.address/latitude/longitude = ที่อยู่ตามแหล่งข้อมูล และพิกัดอ้างอิงจาก OSM (ยังไม่ยืนยันตำแหน่งถังจริง)
 - Donation.ownerId = บัญชี service `won-import@near-cycle.local` ที่สร้างเฉพาะตอนมีรายการใหม่ใน `--apply --confirm`
 - Donation.quantity = 1 (placeholder ที่ schema บังคับ **ไม่ใช่จำนวนวัสดุจริง**)
 - Donation.startDate = วันรัน, endDate = อีก 1 ปี (อายุรายการชั่วคราว ไม่ใช่เวลาปิดจุดรับ)
@@ -44,7 +47,13 @@ docker-compose exec -T backend node scripts/won-import/import.mjs --apply --conf
 - ไม่อัปเดต record ที่เคย import; หากข้อมูลหรือพิกัดเปลี่ยน ต้องตรวจสอบขั้นตอนแก้ไขแยก
 
 ## หมายเหตุ
-พิกัดทั้งหมดเป็น reference coordinates ที่ยังไม่ได้ตรวจกล่องรับจริง; 8 จุดเป็น approximate และอาจคลาดเคลื่อนมาก. Import ได้รับอนุญาตแล้วโดยเก็บคำเตือนใน description. ก่อนใช้เพื่อนำทางควรตรวจสถานที่จริง.
+พิกัดทั้งหมดเป็น reference coordinates ที่ยังไม่ได้ตรวจกล่องรับจริง; WON เดิมมี 8 จุดเป็น approximate และอาจคลาดเคลื่อนมาก. จุด Trash Lucky 20 จุดเป็นพิกัดสถานที่หรืออาคาร ไม่ใช่พิกัดถัง. Import ได้รับอนุญาตแล้วโดยเก็บคำเตือนใน description. ก่อนใช้เพื่อนำทางควรตรวจสถานที่จริง.
 
 ## Geocode Review Report
-\`node backend/scripts/won-import/review.mjs\` สร้าง \`geocode-review.md\` พร้อมลิงก์ตรวจพิกัดทั้ง 31 แห่ง
+\`node backend/scripts/won-import/review.mjs\` สร้าง \`geocode-review.md\` พร้อมลิงก์ตรวจพิกัดทั้ง 51 แห่ง
+
+## เพิ่มเติม 20 จุด Trash Lucky
+- รายการ #32–#51 อยู่ใน `points.json` เดิม แยก category และ import key เพื่อไม่ทับข้อมูล WON
+- ที่มาจุดรับ: https://trashlucky.com/dropoffs/ ; พิกัดอาคารหรือสถานที่: OpenStreetMap Nominatim
+- ข้อมูลวัสดุรับเป็นระดับโครงการ ไม่ใช่การยืนยันรายถัง; ทุกจุดมีคำเตือนให้ตรวจจุดรับก่อนเดินทาง
+- `./near-cycle.sh start` จะเพิ่มเฉพาะจุดใหม่ที่ยังไม่มีใน Database ไม่เปลี่ยนหรือลบจุดเดิม และยังไม่นำเข้าจุด WON #28

@@ -15,8 +15,8 @@ function validThailand(lat, lon) {
   return lat >= 5.5 && lat <= 20.6 && lon >= 97 && lon <= 106;
 }
 function compareLocation(p, displayName) {
-  const parts = p.address.match(/(กรุงเทพมหานคร|ปทุมธานี|เขต[^ ]+|อำเภอ[^ ]+|[0-9]{5})/g) || [];
-  const province = p.address.includes('ปทุมธานี') ? ['ปทุมธานี', 'Pathum Thani'] : ['กรุงเทพมหานคร', 'Bangkok'];
+  const parts = p.address.match(/(กรุงเทพมหานคร|ปทุมธานี|นนทบุรี|สมุทรปราการ|เขต[^ ]+|อำเภอ[^ ]+|[0-9]{5})/g) || [];
+  const province = p.address.includes('ปทุมธานี') ? ['ปทุมธานี', 'Pathum Thani'] : p.address.includes('นนทบุรี') ? ['นนทบุรี', 'Nonthaburi'] : p.address.includes('สมุทรปราการ') ? ['สมุทรปราการ', 'Samut Prakan'] : ['กรุงเทพมหานคร', 'Bangkok'];
   const provinceMatch = province.some((v) => displayName.includes(v));
   const district = parts.find((x) => x.startsWith('เขต') || x.startsWith('อำเภอ'));
   const districtMatch = district ? displayName.includes(district.replace(/^(เขต|อำเภอ)/, '')) : null;

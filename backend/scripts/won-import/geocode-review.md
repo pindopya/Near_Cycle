@@ -1,4 +1,4 @@
-# WON Drop Points: coordinate review
+# Recycling Drop Points: coordinate review
 
 Geocoding results are *candidates*, not the exact physical drop box.
 Verify the building/address and specific bin placement before setting geoStatus to approved.
@@ -37,5 +37,25 @@ Do not approve the public-inaccessible #28 without explicit proof that the publi
 | 29 | เซ็นทรัล พระราม 9 | [13.758568, 100.566065](https://www.openstreetmap.org/?mlat=13.7585683&mlon=100.5660647#map=18/13.7585683/100.5660647) | Central Rama 9, 9/9, ถนนพระราม 9, แขวงห้วยขวาง, เขตห้วยขวาง, กรุงเทพมหานคร, 10320, ประเทศไทย | candidate |
 | 30 | สำนักงานเขตสัมพันธวงศ์ | [13.731547, 100.513816](https://www.openstreetmap.org/?mlat=13.7315471&mlon=100.5138159#map=18/13.7315471/100.5138159) | สำนักงานเขตสัมพันธวงศ์, ซอยวาณิช 2, โรงน้ำแข็ง, แขวงตลาดน้อย, เขตสัมพันธวงศ์, กรุงเทพมหานคร, 10100, ประเทศไทย | candidate; requires point validation |
 | 31 | สำนักงานเขตดินแดง | [13.769930, 100.553162](https://www.openstreetmap.org/?mlat=13.7699305&mlon=100.5531621#map=18/13.7699305/100.5531621) | สำนักงานเขตดินแดง, ถนนมิตรไมตรี, แขวงดินแดง, เขตดินแดง, กรุงเทพมหานคร, 10400, ประเทศไทย | candidate |
+| 32 | Lotus's บางกะปิ | [13.767897, 100.643952](https://www.openstreetmap.org/?mlat=13.7678968&mlon=100.6439519#map=18/13.7678968/100.6439519) | Lotus's, ถนนลาดพร้าว แขวงคลองจั่น เขตบางกะปิ | candidate; requires point validation |
+| 33 | Lotus's พัฒนาการ | [13.737695, 100.636155](https://www.openstreetmap.org/?mlat=13.7376947&mlon=100.6361545#map=18/13.7376947/100.6361545) | Lotus's ถนนพัฒนาการ แขวงพัฒนาการ เขตสวนหลวง | candidate; requires point validation |
+| 34 | Lotus's รัตนาธิเบศร์ | [13.861882, 100.518828](https://www.openstreetmap.org/?mlat=13.8618819&mlon=100.518828#map=18/13.8618819/100.518828) | Lotus's ถนนรัตนาธิเบศร์ ตำบลบางกระสอ | candidate; requires point validation |
+| 35 | Lotus's ลาดกระบัง | [13.719405, 100.793082](https://www.openstreetmap.org/?mlat=13.7194049&mlon=100.7930819#map=18/13.7194049/100.7930819) | Lotus's ถนนหลวงแพ่ง แขวงทับยาว เขตลาดกระบัง | candidate; requires point validation |
+| 36 | The Mall Lifestore งามวงศ์วาน | [13.855264, 100.541823](https://www.openstreetmap.org/?mlat=13.8552642&mlon=100.5418232#map=18/13.8552642/100.5418232) | เดอะมอลล์ งามวงศ์วาน จังหวัดนนทบุรี | candidate; requires point validation |
+| 37 | EmQuartier | [13.731963, 100.569636](https://www.openstreetmap.org/?mlat=13.7319633&mlon=100.5696359#map=18/13.7319633/100.5696359) | EmQuartier ถนนสุขุมวิท เขตคลองเตย | candidate; requires point validation |
+| 38 | Big C ติวานนท์ | [13.844854, 100.510732](https://www.openstreetmap.org/?mlat=13.8448539&mlon=100.5107316#map=18/13.8448539/100.5107316) | บิ๊กซี สาขาติวานนท์ ถนนติวานนท์ จังหวัดนนทบุรี | candidate; requires point validation |
+| 39 | Big C บางนา | [13.668909, 100.635747](https://www.openstreetmap.org/?mlat=13.6689091&mlon=100.6357466#map=18/13.6689091/100.6357466) | Big C ถนนเทพรัตน เขตบางนา | candidate; requires point validation |
+| 40 | Big C ลาดพร้าว 2 | [13.810513, 100.569021](https://www.openstreetmap.org/?mlat=13.8105132&mlon=100.5690209#map=18/13.8105132/100.5690209) | Big C ซอยลาดพร้าว 9 แขวงจอมพล | candidate; requires point validation |
+| 41 | GO Wholesale รังสิต | [13.997478, 100.616845](https://www.openstreetmap.org/?mlat=13.997478&mlon=100.6168455#map=18/13.997478/100.6168455) | GO Wholesale ซอยพหลโยธิน 96 รังสิต | candidate; requires point validation |
+| 42 | The Commons ทองหล่อ | [13.734952, 100.582164](https://www.openstreetmap.org/?mlat=13.7349518&mlon=100.5821642#map=18/13.7349518/100.5821642) | The Commons 335 ซอยทองหล่อ 17 | candidate; requires point validation |
+| 43 | สยามพารากอน | [13.746778, 100.534954](https://www.openstreetmap.org/?mlat=13.7467785&mlon=100.534954#map=18/13.7467785/100.534954) | Siam Paragon ถนนพระรามที่ 1 | candidate; requires point validation |
+| 44 | Big C วงศ์สว่าง | [13.826477, 100.528444](https://www.openstreetmap.org/?mlat=13.8264771&mlon=100.5284443#map=18/13.8264771/100.5284443) | Big C แขวงวงศ์สว่าง เขตบางซื่อ | candidate; requires point validation |
+| 45 | Big C สะพานควาย | [13.791461, 100.549588](https://www.openstreetmap.org/?mlat=13.7914613&mlon=100.5495884#map=18/13.7914613/100.5495884) | Big C ถนนพหลโยธิน สะพานควาย | candidate; requires point validation |
+| 46 | Big C อิสรภาพ | [13.733140, 100.492726](https://www.openstreetmap.org/?mlat=13.7331399&mlon=100.4927256#map=18/13.7331399/100.4927256) | Big C ถนนอิสรภาพ เขตธนบุรี | candidate; requires point validation |
+| 47 | Big C คู้บอน | [13.841183, 100.661729](https://www.openstreetmap.org/?mlat=13.8411833&mlon=100.6617292#map=18/13.8411833/100.6617292) | Big C ถนนคู้บอน เขตคันนายาว | candidate; requires point validation |
+| 48 | The Commons ศาลาแดง | [13.725947, 100.538583](https://www.openstreetmap.org/?mlat=13.7259473&mlon=100.5385829#map=18/13.7259473/100.5385829) | The Commons Saladaeng 126 ซอยศาลาแดง 1 | candidate; requires point validation |
+| 49 | Big C บางปะกอก | [13.683481, 100.492862](https://www.openstreetmap.org/?mlat=13.6834806&mlon=100.4928615#map=18/13.6834806/100.4928615) | Big C ซอยสุขสวัสดิ์ 15/1 แขวงบางปะกอก | candidate; requires point validation |
+| 50 | Lotus's จรัญสนิทวงศ์ | [13.787957, 100.502199](https://www.openstreetmap.org/?mlat=13.787957&mlon=100.5021991#map=18/13.787957/100.5021991) | Lotus's ถนนจรัญสนิทวงศ์ แขวงบางพลัด (ต้องยืนยันสาขา) | candidate; requires point validation |
+| 51 | GO Wholesale พระราม 2 | [13.665757, 100.436387](https://www.openstreetmap.org/?mlat=13.6657567&mlon=100.4363866#map=18/13.6657567/100.4363866) | Go Wholesale Rama 2 แขวงแสมดำ เขตบางขุนเทียน | candidate; requires point validation |
 
-Source: WON Drop Points.pdf, 31 locations. Coordinates: OpenStreetMap Nominatim candidate results.
+Sources: WON Drop Points.pdf (31) and Trash Lucky dropoffs (20). Coordinates: OpenStreetMap Nominatim candidate/approximate results.
